@@ -284,6 +284,16 @@ EXAMPLES = '''
       username: "{{ username }}"
       password: "{{ password }}"
 
+  - name: Set Service Identification
+    community.general.redfish_config:
+      category: Manager
+      command: SetServiceIdentification
+      manager: "{{ manager }}"
+      service_id: "{{ service_id }}"
+      baseuri: "{{ baseuri }}"
+      username: "{{ username }}"
+      password: "{{ password }}"
+
   - name: Set SessionService Session Timeout to 30 minutes
     community.general.redfish_config:
       category: Sessions

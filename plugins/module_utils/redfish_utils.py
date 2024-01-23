@@ -3402,11 +3402,19 @@ class RedfishUtils(object):
                 self.module.fail_json(msg="No manager identities were found")
         response = self.get_request(self.root_uri + '/redfish/v1/Managers/' + manager, override_headers=None)
         try:
-            result['service_identification'] = response['data']['ServiceIdentification']
+            result['service_identification'] = {"Managers/" + manager, response['data']['ServiceIdentification']}
         except Exception as e:
             self.module.fail_json(msg="Service ID not found for manager %s" % manager)
         result['ret'] = True
         return result
+
+    def set_service_identification(self, manager, service_id):
+        if manager == None: 
+          current = self.get_service_identification(manager)
+          manager = list(current.values())[0]
+        data = {"ServiceIdentification": service_id}
+        resp = self.patch_request(self.root_uri + '/redfish/v1/Managers/' + manager, data, check_pyld=True)
+        return resp
 
     def set_session_service(self, sessions_config):
         if sessions_config is None:
